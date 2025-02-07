@@ -31,7 +31,7 @@ import doc13 from './doc13.png'
 import doc14 from './doc14.png'
 import doc15 from './doc15.png'
 import Dermatologist from './Dermatologist.svg'
-import Gastroenterologist from './Gastroenterologist.svg'
+
 import General_physician from './General_physician.svg'
 import Gynecologist from './Gynecologist.svg'
 import Neurologist from './Neurologist.svg'
@@ -79,10 +79,7 @@ export const specialityData = [
         speciality: 'Neurologist',
         image: Neurologist
     },
-    {
-        speciality: 'Gastroenterologist',
-        image: Gastroenterologist
-    },
+
 ]
 
 export const doctors = [
