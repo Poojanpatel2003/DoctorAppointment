@@ -26,7 +26,7 @@ const Sidebar = () => {
                         <p>Doctors List</p>
                     </NavLink>
                 </ul>
-            }
+            } 
         </div>
     );
 }
