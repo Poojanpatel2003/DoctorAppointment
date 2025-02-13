@@ -107,5 +107,14 @@ const loginAdmin = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
     }
 }
+    const allDoctors=async(req,res)=>{
+        try {
+            const doctors=await doctorModel.find({}).select('-password')
+            res.json({success:true,doctors})
+        } catch (error) {
+            console.error("Error in alladdDoctor:", error);
+        res.status(500).json({ success: false, message: error.message });
+        }
+    }
 
-export { addDoctor,loginAdmin };
+export { addDoctor,loginAdmin ,allDoctors};
