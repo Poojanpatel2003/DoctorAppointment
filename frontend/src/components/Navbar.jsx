@@ -6,7 +6,7 @@ import { AppContext } from "../context/AppContext.jsx";
 const Navbar = () => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
-    const { token, setToken } = useContext(AppContext);
+    const { token, setToken,userData } = useContext(AppContext);
     const [showDropdown, setShowDropdown] = useState(false);
 
     // Function to handle logout
@@ -58,10 +58,10 @@ const Navbar = () => {
 
             {/* Profile / Login Section */}
             <div className="flex items-center gap-4">
-                {token ? (
+                {token && userData ? (
                     <div className="relative dropdown-container">
                         <div className="flex items-center cursor-pointer gap-2" onClick={() => setShowDropdown(!showDropdown)}>
-                            <img className="w-8 rounded-full" src={assets.profile_pic} alt="Profile" />
+                            <img className="w-8 rounded-full" src={userData.image} alt="Profile" />
                             <img className="w-2.5" src={assets.dropdown_icon} alt="Dropdown Icon" />
                         </div>
                         {showDropdown && (
