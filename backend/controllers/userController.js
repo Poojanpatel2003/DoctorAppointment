@@ -168,48 +168,73 @@ const bookAppointment = async (req, res) => {
   }
 };
 
-const listAppointment = async (req, res) => {
-  try {
-    const userId = req.user?._id || req.body.userId; // Prefer token-based authentication
+ 
 
-    if (!userId) {
-      return res.status(400).json({ success: false, message: "User ID is required" });
-    }
-
-    const appointments = await appointmentModel
-      .find({ userId })
-      .populate("docData")
-      .populate("userData");
-
-    res.json({ success: true, appointments }); // Fix `json:true` to `success:true`
-  } catch (error) {
-    console.error("Error fetching appointments:", error);
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-const cancelAppointment=async(req,res)=>{
-  try {
-    const {userId,appointmentId}=req.body;
-    const appointmentData = await appointmentModel.findById(appointmentId);
-
-    if(appointmentData.userId!==userId){
-      return res.json({success:true,message:'Unauthorized action'})
-    }
-    await appointmentModel.findByIdAndUpdate(appointmentId,{cancelled:true})
-    const {docId,slotDate,slotTime}=appointmentData;
-    const doctorData=await doctorModel.findById(docId);
-    let slots_booked=doctorData.slots_booked
-    if (slots_booked[slotDate]) {
-      slots_booked[slotDate] = slots_booked[slotDate].filter((e) => e !== slotTime);
-  }
+    const listAppointment = async (req, res) => {
+      try {
+        const userId = req.user?._id || req.body.userId; // Prefer token-based authentication
+        if (!userId) {
+          return res.status(400).json({ success: false, message: "User ID is required" });
+        }
+          const appointments = await appointmentModel.find({ userId})
+              .populate('userId', 'name image age')  // Populate user details
+              .populate('docId', 'name email image speciality degree experience fees address') // Populate doctor details
+              .exec();
   
-    await doctorModel.findByIdAndUpdate(docId,{slots_booked})
-    res.json({success:true,message:'Appointment Cancelled'})
+          res.status(200).json(appointments);
+      } catch (error) {
+          console.error("Error fetching appointments:", error);
+          res.status(500).json({ message: error.message });
+      }
+  };
+  
+  const cancelAppointment = async (req, res) => {
+    try {
+      const { userId, appointmentId } = req.body;
+  
+      // Fetch the appointment data
+      const appointmentData = await appointmentModel.findById(appointmentId);
+      if (!appointmentData) {
+        return res.status(404).json({ success: false, message: "Appointment not found" });
+      }
+  
+      // Ensure only the user who booked the appointment can cancel it
+      if (appointmentData.userId.toString() !== userId) {
+        return res.status(403).json({ success: false, message: "Unauthorized action" });
+      }
+  
+      // Update appointment status to cancelled
+      await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true });
+  
+      // Fetch doctor details
+      const doctorData = await doctorModel.findById(appointmentData.docId);
+      if (!doctorData) {
+        return res.status(404).json({ success: false, message: "Doctor not found" });
+      }
+  
+      // Remove the booked slot from the doctor's schedule
+      const { slotDate, slotTime } = appointmentData;
+      let slots_booked = doctorData.slots_booked || {};
+  
+      if (slots_booked[slotDate]) {
+        slots_booked[slotDate] = slots_booked[slotDate].filter((e) => e !== slotTime);
+  
+        // If no more slots are booked for that date, delete the entry
+        if (slots_booked[slotDate].length === 0) {
+          delete slots_booked[slotDate];
+        }
+      }
+  
+      // Update doctor slots
+      await doctorModel.findByIdAndUpdate(appointmentData.docId, { slots_booked });
+  
+      return res.json({ success: true, message: "Appointment Cancelled" });
+  
+    } catch (error) {
+      console.error("Error canceling appointment:", error);
+      return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  };
+  
 
-  } catch (error) {
-    console.error("Error fetching appointments:", error);
-    res.status(500).json({ success: false, message: error.message });
-  }
-}
 export { registerUser, loginUser, getProfile, updateProfile,bookAppointment,listAppointment,cancelAppointment };
