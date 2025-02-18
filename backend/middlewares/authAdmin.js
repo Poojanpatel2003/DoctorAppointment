@@ -16,4 +16,5 @@ const authAdmin=async(req,res,next)=>{
         res.json({ success: false, error: error.message });
     }
 }
+
 export default authAdmin
