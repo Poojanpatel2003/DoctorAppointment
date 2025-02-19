@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,33 +19,29 @@ const App = () => {
   const { aToken } = useContext(AdminContext);
   const { dToken } = useContext(DoctorContext);
 
-  return (
-    <HashRouter>
-      {aToken || dToken ? (
-        <div className="bg-[#F8F9FD]">
-          <ToastContainer />
-          <Navbar />
-          <div className="flex items-start">
-            <Sidebar />
-            <Routes>
-              <Route path="/" element={<></>} />
-              <Route path="/admin-dashboard" element={<Dashboard />} />
-              <Route path="/all-appointments" element={<AllApointment />} />
-              <Route path="/add-doctor" element={<AddDoctor />} />
-              <Route path="/doctor-list" element={<DoctorsList />} />
-              <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
-              <Route path="/doctor-appointments" element={<DoctorAppointments />} />
-              <Route path="/doctor-profile" element={<DoctorProfile />} />
-            </Routes>
-          </div>
-        </div>
-      ) : (
-        <>
-          <Login />
-          <ToastContainer />
-        </>
-      )}
-    </HashRouter>
+  return aToken || dToken ? (
+    <div className="bg-[#F8F9FD]">
+      <ToastContainer />
+      <Navbar />
+      <div className="flex items-start">
+        <Sidebar />
+        <Routes>
+          <Route path="/" element={<></>} />
+          <Route path="/admin-dashboard" element={<Dashboard />} />
+          <Route path="/all-appointments" element={<AllApointment />} />
+          <Route path="/add-doctor" element={<AddDoctor />} />
+          <Route path="/doctor-list" element={<DoctorsList />} />
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+          <Route path="/doctor-appointments" element={<DoctorAppointments />} />
+          <Route path="/doctor-profile" element={<DoctorProfile />} />
+        </Routes>
+      </div>
+    </div>
+  ) : (
+    <>
+      <Login />
+      <ToastContainer />
+    </>
   );
 };
 
