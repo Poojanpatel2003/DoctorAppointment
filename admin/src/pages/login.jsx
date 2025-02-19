@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import {assets} from "../assets/assets_admin/assets.js";
 import { AdminContext } from "../context/AdminContext.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -33,6 +32,7 @@ const Login = () => {
                         localStorage.setItem('dToken',data.token)
                        setDToken(data.token)
                        console.log(data.token)
+                       toast.success(data.message)
                     }
                     else{
                         toast.error(data.message)
@@ -41,6 +41,7 @@ const Login = () => {
             }
         } catch (error) {
             console.log(error)
+            toast.error(error.messaage)
         }
     }
     return (
