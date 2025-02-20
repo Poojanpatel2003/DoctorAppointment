@@ -21,7 +21,7 @@ const Login = () => {
                     setToken(data.token)
                 }
                 else{
-                    toast.error(data.message)
+                    toast.error('invalid email or password')
                 }
             }
             else{
@@ -31,7 +31,7 @@ const Login = () => {
                     setToken(data.token)
                 }
                 else{
-                    toast.error(data.message)
+                    toast.error('invalid email or password')
                 }
             }
         } catch (error) {
