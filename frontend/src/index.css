@@ -14,6 +14,41 @@
     white-space: nowrap; /* Prevent text from wrapping */
     overflow-x: scroll; /* Enable horizontal scrolling */
 }
+.socialIcons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 35px;
+    margin: 10px 0;
+}
+
+.socialIcons li {
+    list-style: none;
+    font-size: 50px;
+}
+
+.insta {
+    border-radius: 14px;
+    color: white;
+    padding: 5px;
+    font-size: 35px;
+    background: linear-gradient(180deg, #4c568ac4, #5851DB, #833AB4, #c13584, #E1306c, #FD1D1D);
+}
+.facebook{
+    border-radius: 20px;
+    color: white;
+
+    font-size: 35px;
+    background: blue;
+}
+.whatsapp {
+    background-color: #4CAF50; /* Adjusted green color */
+    padding: 5px;
+    font-size: 35px;
+    border-radius: 25px;
+    color: white;
+}
+
 @media (max-width:740px){
     .active p{
         @apply text-white bg-[#5f6FFF];
